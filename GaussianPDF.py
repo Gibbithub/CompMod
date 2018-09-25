@@ -16,7 +16,7 @@ class MyGaussianPdf(object):
         return x
 
 
-    # to evaluate gaussian at x
+    # to evaluate gaussian at x(nice)
     def evaluate(self,x):
         gauss=(1/np.sqrt(2*np.pi*(self.width**2)))*np.exp(-(x-self.mean)**2/2*(self.width**2))
         return gauss
