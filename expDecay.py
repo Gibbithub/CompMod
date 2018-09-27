@@ -8,13 +8,13 @@ class expdec(object):
     def muondec(self):
         logic=True
         while logic :
-            x=np.random.uniform(self.mean-10*self.width, self.mean+10*self.width)
-            y=np.random.uniform(0.0,1.0)
+            x=np.random.uniform(0.0, 8*self.tau)
+            y=np.random.uniform(0.0,self.evaluate(0.0))
             if y < self.evaluate(x):
                 logic = False
         return x
 
-    #returns a numpy arrauy of 1000 muon decays
+    #returns a numpy array of 1000 muon decays
     def kilomuon(self):
         data=np.zeros(1000)
         sum=0
@@ -25,4 +25,7 @@ class expdec(object):
         self.kilodec=data
         return sum/1000
 
-    
+    #evaluate the exponential for a given value
+    def evaluate(self,x):
+        expo=(1/self.tau)*np.exp(-x/self.tau)
+        return expo
