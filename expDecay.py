@@ -1,5 +1,6 @@
 import numpy as np
 
+# class to make a muon decay with exponential distribution
 class expdec(object):
     def __init__(self, tau):
         self.tau=tau
