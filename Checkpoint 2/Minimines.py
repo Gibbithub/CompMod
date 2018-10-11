@@ -5,4 +5,5 @@ class Minimiser(object):
     def __init__(self,params):
         self.param=params
 
-    def minimise(self)
+    def minimise(self,paramg,function)
+        

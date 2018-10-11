@@ -13,11 +13,10 @@ class lineChi(object):
             self.y.append(cols[1])
             self.err.append(cols[2])
 
-    def ChiEval(self,m,c):
+    def ChiEval(self,params):
         chi=0.
         for i in range (len(self.x)):
-            chi += ((y[i]-(m*self.x[i]+c))/self.err[i])**2
+            chi += ((y[i]-(params[0]*self.x[i]+params[1]))/self.err[i])**2
         return chi
 
     def minimise(self,m,c):
-        
