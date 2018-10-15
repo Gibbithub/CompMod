@@ -2,6 +2,6 @@ import numpy as np
 
 class Function(object):
 
-    def eval(x):
-        y=x[0]**2
+    def eeval(self,x):
+        y= 3*(x-0.25)**2+12
         return y
