@@ -17,8 +17,9 @@ class Minimiser(object):
             localparams=self.params.copy()
             incfactor=self.params[i]*0.2 # this works in this case because our values are relatively close to the origin
             localparams[i]=incfactor + self.params[i]
-            while 10*incfactor > accuracy:     # loops till required accuracy is reached
-
+            while incfactor > accuracy:     # loops till required accuracy is reached
+                print self.function(self.params)
+                print self.function(localparams)
                 if (self.function(self.params))==(self.function(localparams)):
                     incfactor=incfactor*0.85
                     localparams[i]=incfactor + self.params[i]
@@ -26,15 +27,15 @@ class Minimiser(object):
                 # two if statements followed by while loops to decrease or increase a variable in order to find min
                 if (self.function(self.params))>(self.function(localparams)):
                     while self.function(self.params)>(self.function(localparams)):
-                        #print self.function(self.params)
+                        print self.function(self.params)
                         self.params[i]=localparams[i]
                         localparams[i]=incfactor+self.params[i]
+                    print incfactor
                     incfactor=incfactor/2
-                elif (self.function(self.params))<(self.function(localparams)):
+                if (self.function(self.params))<(self.function(localparams)):
                     localparams[i]=self.params[i]-2*incfactor
                     while self.function(self.params)>(self.function(localparams)):
-                        print self.function(self.params)
                         self.params[i]=localparams[i]
                         localparams[i]=self.params[i]-incfactor
                     incfactor=incfactor/2
-        return self.params
+        return localparams
