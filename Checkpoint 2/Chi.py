@@ -1,12 +1,13 @@
 """Class to creat and evaluate the chi squared from a data file and a line given by m and c"""
 import numpy as np
+import scipy.optimize as optimize
 
 class lineChi(object):
 
     #initiater reads in file and stores values in useful variable form
     def __init__(self,file):
-        self.m=float
-        self.c=float
+        self.m=0.
+        self.c=0.
         data=open(file,"r")
         self.x=[]
         self.y=[]
@@ -33,4 +34,5 @@ class lineChi(object):
 
     def minimisesci(self,params):
         result=optimize.minimize(self.ChiEval,params)
-         self.m,self.c=result.x
+        self.m,self.c=result.x
+        return result.x
