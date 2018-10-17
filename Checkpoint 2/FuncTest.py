@@ -6,10 +6,11 @@ import scipy.optimize as optimize
 import matplotlib.pyplot as plt
 
 def main():
-    dat="C:\Users\User\.atom\packages\Numerical Recipes\Checkpoint 2\\testData.txt"
+    dat="testData.txt"
     chi2=lineChi(dat)
-    #myMinimiser=Minimiser(chi2.ChiEval,np.array([0.1,1.0]))
+    #myMinimiser=Minimiser(chi2.ChiEval,np.array([0.1,1.0]))- my own minimiser doesn't work as well
 
+    #set up arrays of varying m and c and their resulting chi-squared values shifted down to origin then by one to ge the error
     m,c= chi2.minimisesci(np.array([0.,0.0]))
     deltam= np.linspace((m-m),(m+m),100)
     deltac= np.linspace((c-0.02*c),(c+0.02*c),100)
@@ -33,6 +34,8 @@ def main():
     plt.xlabel("m")
     plt.ylabel("chisquared - 1")
     plt.axhline(y=0)
+    plt.axvline(x=errmmax.x)
+    plt.axvline(x=errmmin.x)
     plt.show()
 
     plt.plot(deltac,chivalc)
