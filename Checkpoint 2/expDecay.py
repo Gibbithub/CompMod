@@ -16,10 +16,10 @@ class expdec(object):
         return x
 
     #returns a numpy array of 1000 muon decays
-    def kilomuon(self):
-        data=np.zeros(1000)
+    def kilomuon(self,iter):
+        data=np.zeros(iter)
         sum=0
-        for i in range (1000):
+        for i in range (iter):
             decay=self.muondec()
             data[i]=decay
             sum+=decay
