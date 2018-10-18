@@ -18,7 +18,7 @@ class Minimiser(object):
             incfactor=self.params[i]*0.5 # this works in this case because our values are relatively close to the origin
             localparams[i]=incfactor + self.params[i] # parameters for self.params to chase down to minimum
             while incfactor > accuracy:     # loops till required accuracy is reached
-                print self.params
+                #print self.params
 
                 if (self.function(self.params))==(self.function(localparams)): # if the parameter stagnates, this perturbs it again
                     incfactor=incfactor*0.95
