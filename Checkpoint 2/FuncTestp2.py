@@ -28,16 +28,14 @@ def main():
     errmaxkilo=optimize.root(nll.NllErrexp,tau+0.05*tau)
     errpos= abs(errminkilo.x[0]-tau)
     errneg= abs(errmaxkilo.x[0]-tau)
-    print " The positive error is %d \n The negative error is %d" % (errpos[0],errneg[0])
+    print " Expected value for tau is" + str(tau)
+    print " The positive error is" + str(errpos) + "\n The negative error is" + str(errneg)
 
     plt.plot(deltatau,nllerrs)
     plt.xlabel("tau")
     plt.ylabel("nll with min at -0.5")
     plt.axhline(y=0)
-    #plt.axvline(x=errmmax.x)
-    #plt.axvline(x=errmmin.x)
     plt.show()
 
-    #tauerrmax=optimize.root(nll.NllErrexp)
 
 main()

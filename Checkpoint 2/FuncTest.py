@@ -7,7 +7,7 @@ import scipy.optimize as optimize
 import matplotlib.pyplot as plt
 
 def main():
-    dat="C:\Users\User\.atom\packages\Numerical Recipes\Checkpoint 2\\testData.txt"
+    dat="testData.txt"
     chi2=lineChi(dat)
     #myMinimiser=Minimiser(chi2.ChiEval,np.array([0.1,1.0]))- my own minimiser doesn't work as well
 
@@ -20,16 +20,20 @@ def main():
     for i in range (100):
         chivalc[i]=chi2.ChiErrc(deltac[i])
         chivalm[i]=chi2.ChiErrm(deltam[i])
-    print m,c
+
+    #find all the roots for the error functions
     errmmax=optimize.root(chi2.ChiErrm,np.array([0.4]))
-    print errmmax.x
     errmmin=optimize.root(chi2.ChiErrm,np.array([-0.1]))
-    print errmmin.x
 
     errcmax=optimize.root(chi2.ChiErrc,np.array([1.000]))
-    print errcmax.x
     errcmin=optimize.root(chi2.ChiErrc,np.array([0.990]))
-    print errcmin.x
+
+    #print all the errors in a nice format
+    print " Expected value for m is" + str(m)
+    print " Positive error in m is" +str(abs(m-errmmax.x)) +"\n Negative error in m is"+str(abs(m-errmmin.x))
+
+    print " Expected value for c is" + str(c)
+    print " Positive error in c is" +str(abs(m-errcmax.x)) +"\n Negative error in c is"+str(abs(m-errcmin.x))
 
     # code used to plot the chi-squared shifted 0 min by 1, used
     plt.plot(deltam,chivalm)
@@ -38,6 +42,7 @@ def main():
     plt.axhline(y=0)
     plt.axvline(x=errmmax.x)
     plt.axvline(x=errmmin.x)
+    plt.title("delta chi-squared and delta m ")
     plt.show()
 
     plt.plot(deltac,chivalc)
@@ -46,7 +51,7 @@ def main():
     plt.axhline(y=0)
     plt.axvline(x=errcmax.x)
     plt.axvline(x=errcmin.x)
-
+    plt.title("delta chi-squared and delta c ")
     plt.show()
 
 
