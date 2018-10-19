@@ -31,10 +31,14 @@ def main():
     print " Expected value for tau is" + str(tau)
     print " The positive error is" + str(errpos) + "\n The negative error is" + str(errneg)
 
+    #plotting the graph with error lines
     plt.plot(deltatau,nllerrs)
     plt.xlabel("tau")
     plt.ylabel("nll with min at -0.5")
     plt.axhline(y=0)
+    plt.axvline(x=errminkilo.x,color='k',linestyle='dashed')
+    plt.axvline(x=errmaxkilo.x,color='k',linestyle='dashed')
+    plt.title("how nll varies with tau ")
     plt.show()
 
 

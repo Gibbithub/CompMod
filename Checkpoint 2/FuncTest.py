@@ -33,25 +33,25 @@ def main():
     print " Positive error in m is" +str(abs(m-errmmax.x)) +"\n Negative error in m is"+str(abs(m-errmmin.x))
 
     print " Expected value for c is" + str(c)
-    print " Positive error in c is" +str(abs(m-errcmax.x)) +"\n Negative error in c is"+str(abs(m-errcmin.x))
+    print " Positive error in c is" +str(abs(c-errcmax.x)) +"\n Negative error in c is"+str(abs(c-errcmin.x))
 
     # code used to plot the chi-squared shifted 0 min by 1, used
     plt.plot(deltam,chivalm)
     plt.xlabel("m")
     plt.ylabel("chisquared with min at -1")
     plt.axhline(y=0)
-    plt.axvline(x=errmmax.x)
-    plt.axvline(x=errmmin.x)
-    plt.title("delta chi-squared and delta m ")
+    plt.axvline(x=errmmax.x,color='k',linestyle='dashed')
+    plt.axvline(x=errmmin.x,color='k',linestyle='dashed')
+    plt.title("How chi-squared varies with delta m ")
     plt.show()
 
     plt.plot(deltac,chivalc)
     plt.xlabel("c")
     plt.ylabel("chisquared with min at -1")
     plt.axhline(y=0)
-    plt.axvline(x=errcmax.x)
-    plt.axvline(x=errcmin.x)
-    plt.title("delta chi-squared and delta c ")
+    plt.axvline(x=errcmax.x,color='k',linestyle='dashed')
+    plt.axvline(x=errcmin.x,color='k',linestyle='dashed')
+    plt.title("How chi-squared varies with delta c ")
     plt.show()
 
 
