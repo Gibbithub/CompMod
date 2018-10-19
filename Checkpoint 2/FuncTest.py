@@ -1,4 +1,4 @@
-"""code for Checkpoint2 sets gets m and c for line of best fit to data, plus works out error by finding roots and plotting chi-squared near min"""
+"""code for Checkpoint2 gets m and c for line of best fit to data, plus works out error by finding roots and plotting chi-squared near min"""
 import numpy as np
 from Chi import lineChi
 from Minimines import Minimiser
