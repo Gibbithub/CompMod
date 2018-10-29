@@ -1,3 +1,4 @@
+"""code to set up the nll for a set of decayed muon(simulated data) and minimise in order to find the parameter and errors"""
 import numpy as np
 from NLL import Nll
 from expDecay import expdec
