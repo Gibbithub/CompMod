@@ -8,7 +8,7 @@ def main():
     RK4=integrator(-2.,2.,0.,500)
     euler.Euler(chrg.evaluate)
     Rk4.Rk4(chrg.evaluate)
-    euler.graph()
-    Rk4.graph()
+    euler.graph('x','E(x)','Euler Integration')
+    Rk4.graph('x','E(x)','Rk Integration')
 
 main()

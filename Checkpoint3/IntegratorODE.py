@@ -1,4 +1,3 @@
-"""
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -6,7 +5,7 @@ from ChargeDistribution import ChargeDistribution
 import copy
 
 class Integrator(object):
-    
+
     def __init__(self,lowerbound,upperbound,lowerboundval,steps):
         self.y=np.zeros(steps)
         self.y[0]=lowerboundval
