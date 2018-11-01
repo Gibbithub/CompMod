@@ -4,8 +4,8 @@ from ChargeDistribution import ChargeDistribution
 
 def main():
     chrg=ChargeDistribution()
-    euler=Integrator(-2.,2.,0.,500)
-    RK4=Integrator(-2.,2.,0.,500)
+    euler=Integrator(-2.,2.,0.,50)
+    RK4=Integrator(-2.,2.,0.,50)
     euler.Euler(chrg)
     RK4.Rk4(chrg)
     euler.graph('x','E(x)','Euler Integration')

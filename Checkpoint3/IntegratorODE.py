@@ -30,7 +30,7 @@ class Integrator(object):
         #return x,y
 
     def graph(self,xlabel,ylabel,title):
-        plt.plot(self.x,self.y)
+        plt.scatter(self.x,self.y)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.title(title)
