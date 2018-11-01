@@ -1,3 +1,4 @@
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -5,31 +6,33 @@ from ChargeDistribution import ChargeDistribution
 import copy
 
 class Integrator(object):
-    def __init__(self):
-        self.integral=[]
+    
+    def __init__(self,lowerbound,upperbound,lowerboundval,steps):
+        self.y=np.zeros(steps)
+        self.y[0]=lowerboundval
+        self.x=np.linspace(lowerbound,upperbound,steps)
+        self.dx=(upperbound-lowerbound)/steps
 
-    def Rk4(self,lowerbound,upperbound,lowerboundval,steps,function):
-        y=np.zeros(steps)
-        y[0]=lowerboundval
-        x=np.linspace(lowerbound,upperbound,steps)
-        dx=(upperbound-lowerbound)/steps
-        for i in range(steps-1):
-            d1 = function.evaluate( [y[i],x[i]] )
-            d2 = function.evaluate( [y[i]+ dx/2*d1, x[i]+dx/2 ] )
-            d3 = function.evaluate( [y[i]+ dx/2*d2, x[i]+dx/2 ] )
-            d4 = function.evaluate( [y[i]+ dx*d3, x[i]+dx ] )
-            dy = dx*(1./6.)*(d1 + 2*d2 + 2*d3 + d4)
-            y[i+1]=dy+y[i]
+    def Rk4(self,function):
+        for i in range(len(self.x)):
+            d1 = function.evaluate( [self.y[i],self.x[i]] )
+            d2 = function.evaluate( [self.y[i]+ self.dx/2*d1, self.x[i]+self.dx/2 ] )
+            d3 = function.evaluate( [self.y[i]+ self.dx/2*d2, self.x[i]+self.dx/2 ] )
+            d4 = function.evaluate( [self.y[i]+ self.dx*d3, self.x[i]+self.dx ] )
+            dy = self.dx*(1./6.)*(d1 + 2*d2 + 2*d3 + d4)
+            self.y[i+1]=dy+self.y[i]
         return x,y
 
 
-
-    def Euler(self,lowerbound,upperbound,lowerboundval,steps,function):
-        y=np.zeros(steps)
-        y[0]=lowerboundval
-        x=np.linspace(lowerbound,upperbound,steps)
-        dx=(upperbound-lowerbound)/steps
-        for i in range(steps-1):
-            dy = float(function.evaluate( [y[i],x[i]] ))*dx
-            y[i+1]=dy+y[i]
+    def Euler(self,function):
+        for i in range(len(self.x)):
+            dy = float(function.evaluate( [self.y[i],self.x[i]] ))*self.dx
+            self.y[i+1]=dy+self.y[i]
         return x,y
+
+    def graph(self,xlabel,ylabel,title):
+        plt.plot(self.x,self.y)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.title(title)
+        plt.show()
