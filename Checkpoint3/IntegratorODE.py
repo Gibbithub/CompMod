@@ -13,21 +13,21 @@ class Integrator(object):
         self.dx=(upperbound-lowerbound)/steps
 
     def Rk4(self,function):
-        for i in range(len(self.x)):
+        for i in range(len(self.x)-1):
             d1 = function.evaluate( [self.y[i],self.x[i]] )
             d2 = function.evaluate( [self.y[i]+ self.dx/2*d1, self.x[i]+self.dx/2 ] )
             d3 = function.evaluate( [self.y[i]+ self.dx/2*d2, self.x[i]+self.dx/2 ] )
             d4 = function.evaluate( [self.y[i]+ self.dx*d3, self.x[i]+self.dx ] )
             dy = self.dx*(1./6.)*(d1 + 2*d2 + 2*d3 + d4)
             self.y[i+1]=dy+self.y[i]
-        return x,y
+        #return x,y
 
 
     def Euler(self,function):
-        for i in range(len(self.x)):
-            dy = float(function.evaluate( [self.y[i],self.x[i]] ))*self.dx
+        for i in range(len(self.x)-1):
+            dy = function.evaluate( [self.y[i],self.x[i]] )*self.dx
             self.y[i+1]=dy+self.y[i]
-        return x,y
+        #return x,y
 
     def graph(self,xlabel,ylabel,title):
         plt.plot(self.x,self.y)

@@ -15,5 +15,5 @@ class Interpolater(object):
                 return self.y[i]
             elif self.x[i]<x:
                 coords=i
-        y=(self.y[i]+self.y[i+1])/2self.
+        y=(self.y[i]+self.y[i+1])/2
         return y

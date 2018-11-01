@@ -19,8 +19,8 @@ class ChargeDistribution:
     # To evaluate the y-value of the charge for an input x-value
     def evaluate(self, x):
         if( x[1] < self.x1): return 0
-        if( x[1] < self.x2): return self._shape( self.x1, self.x2, x)
-        if( x[1] < self.x3): return -self._shape( self.x3, self.x2, x)
+        if( x[1] < self.x2): return self._shape( self.x1, self.x2, x[1])
+        if( x[1] < self.x3): return -self._shape( self.x3, self.x2, x[1])
         return 0.
 
     # To plot the function on the screen
