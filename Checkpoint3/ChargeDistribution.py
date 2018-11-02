@@ -27,6 +27,8 @@ class ChargeDistribution:
     def show(self, title='', disp=True ):
         xvalues, yvalues = self._get()
         pl.plot( xvalues, yvalues )
+        pl.xlabel('x')
+        pl.ylabel('q(x)')
         pl.title( title )
         if(disp):pl.show()
 
@@ -52,5 +54,5 @@ class ChargeDistribution:
         dx = (end-start)/n
         for i in range(n):
             xvalues.append(start+i*dx)
-            yvalues.append(self.evaluate(start+i*dx))
+            yvalues.append(self.evaluate([0,start+i*dx]))
         return xvalues, yvalues
