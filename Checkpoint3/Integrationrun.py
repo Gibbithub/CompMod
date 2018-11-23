@@ -36,13 +36,13 @@ def main():
     voltage.Rk4(current)
 
     #optional way to use Euler method for part 2 as well
-    #currente=Interpolater(euler.x,-euler.y)
-    #voltagee=Integrator(-2.,2.,0.,500)
-    #voltagee.Rk4(currente)
+    currente=Interpolater(euler.x,-euler.y)
+    voltagee=Integrator(-2.,2.,0.,500)
+    voltagee.Euler(currente)
 
     #plot the voltage
     voltage.graph(plt.plot,'Rk4')
-    #voltagee.graph(plt.plot,'Euler')
+    voltagee.graph(plt.plot,'Euler')
     plt.title('Voltage')
     plt.xlabel('x')
     plt.ylabel('V(x)')
