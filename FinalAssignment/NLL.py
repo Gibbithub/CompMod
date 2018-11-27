@@ -19,6 +19,7 @@ class Nll(object):
         decay.evalmethod=self.evalmethod
         for i in range(len(self.data)):
             nll+=np.log(decay.evaluate(self.data[i]))
+        print nll
         return -nll
 
     def NllErrexp(self,param):# shifts to min and then by 0.5 for error purposes

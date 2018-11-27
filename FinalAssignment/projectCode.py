@@ -36,7 +36,7 @@ def Part2(data):
     tau1=1.0               #1.9
     tau2=2.0                   #0.5
     guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.0,20.0),(0.0,20.0))
+    bound=((0.0,1.0),(0.00001,10.0),(0.00001,10.0))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
     print results
     for i in range(len(results.x)):
@@ -96,6 +96,26 @@ def Part3(data):
     print minF,F_error1,F_error2
     print mintau1,tau1_error1,tau1_error2
     print mintau2,tau2_error1,tau2_error2
+
+def Part4():
+    def minfind(self,nll):
+        dnll=-1.0
+        delta= nll.parameters[nll.error_calcindex]*0.2
+        while delta>=0.0001:
+            while dnll<0.0:
+                params=np.copy(nll.parameters)
+                params=np.delete(params,nll.error_calcindex)
+                minimised=optimize.minimize(nll.NllErrproper,params)
+                dnll=nll.NllErrproper(minimised.x)
+                nll.delta+=delta
+            delta=delta/2.0
+            while dnll>0.0:
+                params=np.copy(nll.parameters)
+                params=np.delete(params,nll.error_calcindex)
+                minimised=optimize.minimize(nll.NllErrproper,params)
+                dnll=nll.NllErrproper(minimised.x)
+                nll.delta-=delta
+        print nll.delta
 
 
 
