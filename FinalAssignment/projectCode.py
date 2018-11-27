@@ -10,7 +10,7 @@ def Part1():
     tau1=input("input the desired valued for tau1:")
     tau2=input("input the desired valued for tau2:")
     # generate 10000 decays with the weighting for component p1=f
-    equicomponent=dualexpdec(np.array([f,1.0,2.0]))
+    equicomponent=dualexpdec(np.array([f,tau1,tau2]))
     dist=equicomponent.kilodecay(10000)
     tdist=[k[0] for k in dist]
     thetadist=([k[1] for k in dist])
@@ -29,16 +29,16 @@ def Part1():
 # The distribution for f in between 1 and 0 is a scaled linear combination of distribution for f=1 and f=0 ( in some some sense these are the extreme distributions)
 
 def Part2(data):
-    nll=Nll(data,dualexpdec)
+    nll=Nll(data,dualexpdec,'t only')
+
     #minimise Nll for numdec decays
-    F=0.9
-    tau1=1.9
-    tau2=0.5
+    F=0.5              #0.9
+    tau1=1.0               #1.9
+    tau2=2.0                   #0.5
     guess_params=np.array([F,tau1,tau2])
     bound=((0.0,1.0),(0.0,20.0),(0.0,20.0))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
-    print results.success
-    print results.x
+    print results
     for i in range(len(results.x)):
         nll.parameters.append(results.x[i])
     nll.parameters=np.array(nll.parameters)
@@ -66,16 +66,15 @@ def Part2(data):
 def Part3(data):
 
     #print data
-    nll=Nll(data,dualexpdec)
+    nll=Nll(data,dualexpdec,'all')
     #minimise Nll for numdec decays
     F=0.5
     tau1=1.0
     tau2=2.0
     guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.0,20.0),(0.0,20.0))
+    bound=((0.0,1.0),(0.0,10.0),(0.0,10.0))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
-    print results.success
-    print results.x
+    print results
     for i in range(len(results.x)):
         nll.parameters.append(results.x[i])
     nll.parameters=np.array(nll.parameters)
@@ -97,6 +96,8 @@ def Part3(data):
     print minF,F_error1,F_error2
     print mintau1,tau1_error1,tau1_error2
     print mintau2,tau2_error1,tau2_error2
+
+
 
 
 def main():

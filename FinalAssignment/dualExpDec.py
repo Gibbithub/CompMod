@@ -6,6 +6,7 @@ class dualexpdec(object):
         self.tau1=parameters[1]
         self.tau2=parameters[2]
         self.f=parameters[0]
+        self.evalmethod='all'
 
     #returns random theta and t within relevant distribution
     def decay(self):
@@ -27,11 +28,13 @@ class dualexpdec(object):
 
     #evaluates the value of pdf for given t and theta, if only one value if given marginalise over theta first
     def evaluate(self,variables):
-        if hasattr(variables, '__len__'):
-            p1=(self.f/(3.0*np.pi*self.tau1))*(1+(np.cos(variables[1])**2))*np.exp(-variables[0]/self.tau1)
-            p2=((1-self.f)/(self.tau2*np.pi))*(np.sin(variables[1])**2)*np.exp(-variables[0]/self.tau2)
-        else:
-            p1=(self.f/self.tau1)*np.exp(-variables/self.tau1)
-            p2=((1-self.f)/self.tau2)*np.exp(-variables/self.tau2)
+        if self.evalmethod=='all':
+            p1=(self.f/(3.0*np.pi*self.tau1*(1-np.exp(-10/self.tau1))))*(1+(np.cos(variables[1])**2))*np.exp(-variables[0]/self.tau1)
+            p2=((1-self.f)/(self.tau2*np.pi*(1-np.exp(-10/self.tau2))))*(np.sin(variables[1])**2)*np.exp(-variables[0]/self.tau2)
+
+        elif self.evalmethod == 't only':
+            p1=(self.f/(self.tau1*(1-np.exp(-10/self.tau1)))*np.exp(-variables/self.tau1))
+            p2=((1-self.f)/(self.tau2*(1-np.exp(-10/self.tau1)))*np.exp(-variables/self.tau2))
+
         pdf=p1+p2
         return pdf
