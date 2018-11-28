@@ -26,7 +26,7 @@ class dualexpdec(object):
             data[i][0],data[i][1]=self.decay()
         return data
 
-    #evaluates the value of pdf for given t and theta, if only one value if given marginalise over theta first
+    #evaluates the value of pdf for given t and theta, if only t_distribution is wanted marginalise over theta first
     def evaluate(self,variables):
         if self.evalmethod=='all':
             p1=(self.f/(3.0*np.pi*self.tau1*(1-np.exp(-10/self.tau1))))*(1+(np.cos(variables[1])**2))*np.exp(-variables[0]/self.tau1)

@@ -19,12 +19,12 @@ class Nll(object):
         decay.evalmethod=self.evalmethod
         for i in range(len(self.data)):
             nll+=np.log(decay.evaluate(self.data[i]))
-        print nll
-        print params
+        #print nll
+        #print params
         return -nll
 
     def NllErrexp(self,param):# shifts to min and then by 0.5 for error purposes
-        params=self.parameters.copy()
+        params=np.copy(self.parameters)
         params[self.error_calcindex]=param
         err=self.NllEvalexp(params)-self.NllEvalexp(self.parameters)-0.5
         return err
@@ -38,4 +38,10 @@ class Nll(object):
             params[i]=param[i-1]
 
         err=self.NllEvalexp(params)-self.NllEvalexp(self.parameters)-0.5
+        print 'testing nll',self.NllEvalexp(params)
+        print 'min nll',self.NllEvalexp(self.parameters)
+        print 'minimisation params',params
+        print 'min params',self.parameters
+        print 'nll below 0',err
+        print 'delta',self.delta
         return err
