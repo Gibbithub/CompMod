@@ -20,6 +20,7 @@ class Nll(object):
         for i in range(len(self.data)):
             nll+=np.log(decay.evaluate(self.data[i]))
         print nll
+        print params
         return -nll
 
     def NllErrexp(self,param):# shifts to min and then by 0.5 for error purposes
@@ -32,8 +33,7 @@ class Nll(object):
         params=np.zeros(len(param)+1)
         for i in range(self.error_calcindex):
             params[i]=param[i]
-            n=i
-        params[n+1]=self.parameters[self.error_calcindex] + self.delta
+        params[self.error_calcindex]=self.parameters[self.error_calcindex] + self.delta
         for i in range(self.error_calcindex+1,len(self.parameters)):
             params[i]=param[i-1]
 

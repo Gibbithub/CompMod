@@ -18,20 +18,4 @@ class errorfind3d(object):
         #        x2=xcen
         #return xcen
 
-    def minfind(self,nll):
-        dnll=-1.0
-        delta= nll.parameters[nll.error_calcindex]*0.2
-        while delta>=0.0001:
-            while dnll<0.0:
-                params=np.copy(nll.parameters)
-                params=np.delete(params,nll.error_calcindex)
-                minimised=optimize.minimize(nll.NllErrproper,params)
-                dnll=nll.NllErrproper(minimised.x)
-                nll.delta+=delta
-            delta=delta/2.0
-            while dnll>0.0:
-                params=np.copy(nll.parameters)
-                params=np.delete(params,nll.error_calcindex)
-                minimised=optimize.minimize(nll.NllErrproper,params)
-                dnll=nll.NllErrproper(minimised.x)
-                nll.delta-=delta
+    
