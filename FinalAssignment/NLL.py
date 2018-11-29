@@ -43,11 +43,11 @@ class Nll(object):
             params[i]=param[i-1]
 
         err=self.NllEvalexp(params)-self.nllmin
-        print 'testing nll',self.NllEvalexp(params)
-        print 'nll dif',err
-        print 'min nll',self.nllmin
+        #print 'testing nll',self.NllEvalexp(params)
+        #print 'nll dif',err
+        #print 'min nll',self.nllmin
         #print 'minimisation params',params
         #print 'min params',self.parameters
         #print 'nll below 0',err
-        print 'delta',self.delta
+        #print 'delta',self.delta
         return err

@@ -36,7 +36,7 @@ def Part2(data):
     tau1=1.0               #1.9
     tau2=2.0                   #0.5
     guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.0,10.0),(0.0,10.0))
+    bound=((0.0,1.0),(0.0000001,0.9999999),(0.0000001,0.9999999))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
     print't only'
     print results
@@ -50,31 +50,45 @@ def Part2(data):
     F_error1=optimize.root(nll.NllErrexp,minF-0.1).x-minF
     F_error2=optimize.root(nll.NllErrexp,minF+0.1).x-minF
     #F_properr1,F_properr2=properrorfind(nll)
-    Fplot=np.linspace(minF+F_error1, minF+F_error2,100)
+    print 'F',minF,F_error1,F_error2
+    Fplot=np.linspace(minF+F_error1, minF+F_error2,300)
     Fnll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    plt.plot(Fplot,Fnll)
+    plt.title('F simple error t data only ')
+    plt.xlabel('Fraction of P1')
+    plt.ylabel('Change in Nll')
+    plt.show()
 
     nll.error_calcindex=1
     tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.1).x-mintau1
     tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.1).x-mintau1
-    tau1plot=np.linspace(mintau1+tau1_error1, mintau1+tau1_error2,100)
+    print 'tau1', mintau1,tau1_error1,tau1_error2
+    tau1plot=np.linspace(mintau1+tau1_error1, mintau1+tau1_error2,300)
     tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    plt.plot(tau1plot,tau1nll)
+    plt.title('tau1 simple error t data only ')
+    plt.xlabel('tau1')
+    plt.ylabel('Change in Nll')
+    plt.show()
 
     nll.error_calcindex=2
     tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.1).x-mintau2
     tau2_error2=optimize.root(nll.NllErrexp,mintau2+0.1).x-mintau2
-    tau2plot=np.linspace(mintau2+tau2_error1, mintau2+tau2_error2,100)
+    print 'tau2',mintau2,tau2_error1,tau2_error2
+    tau2plot=np.linspace(mintau2+tau2_error1, mintau2+tau2_error2,300)
     tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
-
-    print minF,F_error1,F_error2
-    print mintau1,tau1_error1,tau1_error2
-    print mintau2,tau2_error1,tau2_error2
-
-    plt.plot(Fplot,Fnll)
-    plt.show()
-    plt.plot(tau1plot,tau1nll)
-    plt.show()
     plt.plot(tau2plot,tau2nll)
+    plt.title('tau2 simple error t data only ')
+    plt.xlabel('tau2')
+    plt.ylabel('Change in Nll')
     plt.show()
+
+
+
+
+
+
+
 
 
 
@@ -102,21 +116,43 @@ def Part3(data):
     nll.error_calcindex=0
     F_error1=optimize.root(nll.NllErrexp,minF-0.1).x-minF
     F_error2=optimize.root(nll.NllErrexp,minF+0.1).x-minF
-    print minF,F_error1,F_error2
+    print 'F',minF,F_error1,F_error2
+    Fplot=np.linspace(minF+F_error1, minF+F_error2,300)
+    Fnll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    plt.plot(Fplot,Fnll)
+    plt.title('F simple error all data')
+    plt.xlabel('Fraction of P1')
+    plt.ylabel('Change in Nll')
+    plt.show()
     F_properr1=properrorfind(nll)
     print F_properr1
 
 
     nll.error_calcindex=1
-    tau1_error1=optimize.root((nll.NllErrexp-0.5),mintau1-0.1).x-mintau1
-    tau1_error2=optimize.root((nll.NllErrexp-0.5),mintau1+0.1).x-mintau1
+    tau1_error1=optimize.root((nll.NllErrexp),mintau1-0.1).x-mintau1
+    tau1_error2=optimize.root((nll.NllErrexp),mintau1+0.1).x-mintau1
+    print 'tau1', mintau1,tau1_error1,tau1_error2
+    tau1plot=np.linspace(mintau1+tau1_error1, mintau1+tau1_error2,300)
+    tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    plt.plot(tau1plot,tau1nll)
+    plt.title('tau1 simple error all data')
+    plt.xlabel('tau1')
+    plt.ylabel('Change in Nll')
+    plt.show()
     tau1_properr1=properrorfind(nll)
-    print mintau1,tau1_error1,tau1_error2,
     print tau1_properr1
 
     nll.error_calcindex=2
     tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.1).x-mintau2
     tau2_error2=optimize.root(nll.NllErrexp,mintau2+0.1).x-mintau2
+    print 'tau2',mintau2,tau2_error1,tau2_error2
+    tau2plot=np.linspace(mintau2+tau2_error1, mintau2+tau2_error2,300)
+    tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    plt.plot(tau2plot,tau2nll)
+    plt.title('tau 2 simple error all data')
+    plt.xlabel('tau2')
+    plt.ylabel('Change in Nll')
+    plt.show()
     tau2_properr1=properrorfind(nll)
     print tau2_properr1
 
@@ -152,11 +188,13 @@ def properrorfind(nll):
         delta=delta/2.0
         #print 'delta after mid',delta
         while dnll>0.5:
+            counter +=1
             params=np.copy(nll.parameters)
             params=np.delete(params,nll.error_calcindex)
             minimised=optimize.minimize(nll.NllErrproper,params)
             dnll=nll.NllErrproper(minimised.x)
             nll.delta-=delta
+            print counter
             #print 'dnll',dnll
             #print 'delta', delta
             #print 'nll.delta', nll.delta
@@ -190,14 +228,14 @@ def main():
     #Part1()
     file=open('datafile-Xdecay.txt','r')
     stringdata=np.array([line.split() for line in file])
-    datafull=np.asfarray(stringdata,float)
-    n_randints=np.random.randint(len(datafull),size=500)
-    data=np.array([datafull[k] k for k in n_randints])
+    data=np.asfarray(stringdata,float)
+    #n_randints=np.random.randint(len(datafull),size=1000)
+    #data=np.array([datafull[k] for k in n_randints])
     t_data=np.array([k[0] for k in data])
     theta_data=np.array([k[1] for k in data])
-    plt.hist(t_data,bins=85)
+    #plt.hist(t_data,bins=85)
     #plt.show()
-    plt.hist(theta_data,bins=85)
+    #plt.hist(theta_data,bins=85)
     #plt.show()
     Part2(t_data)
     Part3(data)
