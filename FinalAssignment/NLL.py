@@ -4,16 +4,18 @@ import scipy.optimize as optimize
 
 
 class Nll(object):
-    def __init__(self,data,decayform,evalmethod):# initiates with a list of data
+    # initiates nll with a data set, a class which forms the model to which the data is to be fit and any condtions on the evaluation function of said model
+    def __init__(self,data,decayform,evalmethod):
         self.data=data
         self.decayform=decayform
         self.parameters=[] #np.zeros(no_params) # used to hold values for parameters at minimum
-        self.nllmin=0
+        self.nllmin=0 # holds minimum value for the nll
         self.evalmethod=evalmethod
-        self.error_calcindex=0
-        self.delta=0
+        self.error_calcindex=0 # holds the index of the variable for which errors are being calculated
+        self.delta=0 #holds the error on the variable being
 
-    def NllEvalexp(self,params):# calculates for a given value of tau
+    #method evaluates nll for given parameters for the model function
+    def NllEvalexp(self,params):
         nll=0.
         decay=self.decayform(params)
         decay.evalmethod=self.evalmethod
@@ -23,13 +25,16 @@ class Nll(object):
         #print params
         return -nll
 
-    def NllErrexp(self,param):# shifts to min and then by 0.5 for error purposes
+    #Method evaluates the nll with only one parameters being changed and the others set to the minimalising values. The method returns the difference between this nll and the minimal nll - 0.5.
+    def NllErrexp(self,param):#finding roots for this function gives simple errors
+        self.nllmin=self.NllEvalexp(self.parameters)
         params=np.copy(self.parameters)
         params[self.error_calcindex]=param
-        err=self.NllEvalexp(params)-self.NllEvalexp(self.parameters)-0.5
+        err=self.NllEvalexp(params)-self.nllmin-0.5
         return err
 
     def NllErrproper(self,param):
+        self.nllmin=self.NllEvalexp(self.parameters)
         params=np.zeros(len(param)+1)
         for i in range(self.error_calcindex):
             params[i]=param[i]
@@ -37,11 +42,12 @@ class Nll(object):
         for i in range(self.error_calcindex+1,len(self.parameters)):
             params[i]=param[i-1]
 
-        err=self.NllEvalexp(params)-self.NllEvalexp(self.parameters)-0.5
+        err=self.NllEvalexp(params)-self.nllmin
         print 'testing nll',self.NllEvalexp(params)
-        print 'min nll',self.NllEvalexp(self.parameters)
-        print 'minimisation params',params
-        print 'min params',self.parameters
-        print 'nll below 0',err
+        print 'nll dif',err
+        print 'min nll',self.nllmin
+        #print 'minimisation params',params
+        #print 'min params',self.parameters
+        #print 'nll below 0',err
         print 'delta',self.delta
         return err

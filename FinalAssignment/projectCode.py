@@ -36,7 +36,7 @@ def Part2(data):
     tau1=1.0               #1.9
     tau2=2.0                   #0.5
     guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.00001,9.999999),(0.00001,9.99999))
+    bound=((0.0,1.0),(0.0,10.0),(0.0,10.0))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
     print't only'
     print results
@@ -50,18 +50,33 @@ def Part2(data):
     F_error1=optimize.root(nll.NllErrexp,minF-0.1).x-minF
     F_error2=optimize.root(nll.NllErrexp,minF+0.1).x-minF
     #F_properr1,F_properr2=properrorfind(nll)
+    Fplot=np.linspace(minF+F_error1, minF+F_error2,100)
+    Fnll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
 
     nll.error_calcindex=1
     tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.1).x-mintau1
     tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.1).x-mintau1
+    tau1plot=np.linspace(mintau1+tau1_error1, mintau1+tau1_error2,100)
+    tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
 
     nll.error_calcindex=2
     tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.1).x-mintau2
     tau2_error2=optimize.root(nll.NllErrexp,mintau2+0.1).x-mintau2
+    tau2plot=np.linspace(mintau2+tau2_error1, mintau2+tau2_error2,100)
+    tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
 
     print minF,F_error1,F_error2
     print mintau1,tau1_error1,tau1_error2
     print mintau2,tau2_error1,tau2_error2
+
+    plt.plot(Fplot,Fnll)
+    plt.show()
+    plt.plot(tau1plot,tau1nll)
+    plt.show()
+    plt.plot(tau2plot,tau2nll)
+    plt.show()
+
+
 
 
 
@@ -87,14 +102,14 @@ def Part3(data):
     nll.error_calcindex=0
     F_error1=optimize.root(nll.NllErrexp,minF-0.1).x-minF
     F_error2=optimize.root(nll.NllErrexp,minF+0.1).x-minF
-    F_properr1=properrorfind(nll)
     print minF,F_error1,F_error2
+    F_properr1=properrorfind(nll)
     print F_properr1
 
 
     nll.error_calcindex=1
-    tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.1).x-mintau1
-    tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.1).x-mintau1
+    tau1_error1=optimize.root((nll.NllErrexp-0.5),mintau1-0.1).x-mintau1
+    tau1_error2=optimize.root((nll.NllErrexp-0.5),mintau1+0.1).x-mintau1
     tau1_properr1=properrorfind(nll)
     print mintau1,tau1_error1,tau1_error2,
     print tau1_properr1
@@ -110,40 +125,48 @@ def Part3(data):
     print mintau2,tau2_error1,tau2_error2,tau2_properr1#,tau2_properr2
 
 def properrorfind(nll):
+    bound=((0.0,1.0),(0.0,10.0),(0.0,10.0))
+    bound=np.array(bound)
+    np.delete(bound,nll.error_calcindex)
+    print bound
     dnll=-1.0
     pos_error=0
     neg_error=0
-    delta= nll.parameters[nll.error_calcindex]*0.2
+    delta= nll.parameters[nll.error_calcindex]*0.1
     print 'delta start',delta
+    nll.delta=delta
+    counter = 0
     while delta>=0.001:
-        while dnll<0.0:
+        while dnll<0.5:
+            counter +=1
             params=np.copy(nll.parameters)
             params=np.delete(params,nll.error_calcindex)
             minimised=optimize.minimize(nll.NllErrproper,params)
             dnll=nll.NllErrproper(minimised.x)
             nll.delta+=delta
-            print 'dnll',dnll
-            print 'delta pos move', delta
-            print 'nll delta', nll.delta
-        print 'delta min',delta
+            print counter
+            #print 'dnll',dnll
+            #print 'delta pos move', delta
+            #print 'nll delta', nll.delta
+        #print 'delta min',delta
         delta=delta/2.0
-        print 'delta after mid',delta
-        while dnll>0.0:
+        #print 'delta after mid',delta
+        while dnll>0.5:
             params=np.copy(nll.parameters)
             params=np.delete(params,nll.error_calcindex)
             minimised=optimize.minimize(nll.NllErrproper,params)
             dnll=nll.NllErrproper(minimised.x)
             nll.delta-=delta
-            print 'dnll',dnll
-            print 'delta', delta
-            print 'nll.delta', nll.delta
+            #print 'dnll',dnll
+            #print 'delta', delta
+            #print 'nll.delta', nll.delta
     pos_error=nll.delta
     print 'pos_error',pos_error
 
     '''dnll=-1.0
     delta=-nll.parameters[nll.error_calcindex]*0.2
     while delta<=-0.001:
-        while dnll<0.0:
+        while dnll<0.5:
             params=np.copy(nll.parameters)
             params=np.delete(params,nll.error_calcindex)
             minimised=optimize.minimize(nll.NllErrproper,params)
@@ -151,7 +174,7 @@ def properrorfind(nll):
             nll.delta+=delta
             print nll.delta
         delta=delta/2.0
-        while dnll>0.0:
+        while dnll>0.5:
             params=np.copy(nll.parameters)
             params=np.delete(params,nll.error_calcindex)
             minimised=optimize.minimize(nll.NllErrproper,params)
@@ -167,14 +190,16 @@ def main():
     #Part1()
     file=open('datafile-Xdecay.txt','r')
     stringdata=np.array([line.split() for line in file])
-    data=np.asfarray(stringdata,float)
+    datafull=np.asfarray(stringdata,float)
+    n_randints=np.random.randint(len(datafull),size=500)
+    data=np.array([datafull[k] k for k in n_randints])
     t_data=np.array([k[0] for k in data])
     theta_data=np.array([k[1] for k in data])
     plt.hist(t_data,bins=85)
     #plt.show()
     plt.hist(theta_data,bins=85)
     #plt.show()
-    #Part2(t_data)
+    Part2(t_data)
     Part3(data)
 
 
