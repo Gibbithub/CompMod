@@ -36,7 +36,7 @@ def Part2(data):
     tau1=1.0               #1.9
     tau2=2.0                   #0.5
     guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.0000001,0.9999999),(0.0000001,0.9999999))
+    bound=((0.0,1.0),(0.0000001,9.9999999),(0.0000001,9.9999999))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
     print't only'
     print results
@@ -47,8 +47,8 @@ def Part2(data):
     minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
 
     nll.error_calcindex=0
-    F_error1=optimize.root(nll.NllErrexp,minF-0.1).x-minF
-    F_error2=optimize.root(nll.NllErrexp,minF+0.1).x-minF
+    F_error1=optimize.root(nll.NllErrexp,minF-0.001).x-minF
+    F_error2=optimize.root(nll.NllErrexp,minF+0.001).x-minF
     #F_properr1,F_properr2=properrorfind(nll)
     print 'F',minF,F_error1,F_error2
     Fplot=np.linspace(minF+F_error1, minF+F_error2,300)
@@ -60,8 +60,8 @@ def Part2(data):
     plt.show()
 
     nll.error_calcindex=1
-    tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.1).x-mintau1
-    tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.1).x-mintau1
+    tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.001).x-mintau1
+    tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.001).x-mintau1
     print 'tau1', mintau1,tau1_error1,tau1_error2
     tau1plot=np.linspace(mintau1+tau1_error1, mintau1+tau1_error2,300)
     tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
@@ -72,8 +72,8 @@ def Part2(data):
     plt.show()
 
     nll.error_calcindex=2
-    tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.1).x-mintau2
-    tau2_error2=optimize.root(nll.NllErrexp,mintau2+0.1).x-mintau2
+    tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.001).x-mintau2
+    tau2_error2=optimize.root(nll.NllErrexp,mintau2+0.001).x-mintau2
     print 'tau2',mintau2,tau2_error1,tau2_error2
     tau2plot=np.linspace(mintau2+tau2_error1, mintau2+tau2_error2,300)
     tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
@@ -215,7 +215,7 @@ def properrorfind(nll):
         while dnll>0.5:
             params=np.copy(nll.parameters)
             params=np.delete(params,nll.error_calcindex)
-            minimised=optimize.minimize(nll.NllErrproper,params)
+             minimised=optimize.minimize(nll.NllErrproper,params)
             dnll=nll.NllErrproper(minimised.x)
             nll.delta-=delta
             print nll.delta
@@ -238,7 +238,7 @@ def main():
     #plt.hist(theta_data,bins=85)
     #plt.show()
     Part2(t_data)
-    Part3(data)
+    #Part3(data)
 
 
 main()
