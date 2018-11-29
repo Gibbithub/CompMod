@@ -108,8 +108,8 @@ def Part3(data):
 
 
     nll.error_calcindex=1
-    tau1_error1=optimize.root((nll.NllErrexp-0.5),mintau1-0.1).x-mintau1
-    tau1_error2=optimize.root((nll.NllErrexp-0.5),mintau1+0.1).x-mintau1
+    tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.1).x-mintau1
+    tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.1).x-mintau1
     tau1_properr1=properrorfind(nll)
     print mintau1,tau1_error1,tau1_error2,
     print tau1_properr1
@@ -191,13 +191,14 @@ def main():
     file=open('datafile-Xdecay.txt','r')
     stringdata=np.array([line.split() for line in file])
     datafull=np.asfarray(stringdata,float)
-    n_randints=np.random.randint(len(datafull),size=500)
-    data=np.array([datafull[k] k for k in n_randints])
+    n_randints=np.random.randint(len(datafull),size=1000)
+    data=np.array([datafull[k] for k in n_randints])
     t_data=np.array([k[0] for k in data])
     theta_data=np.array([k[1] for k in data])
-    plt.hist(t_data,bins=85)
-    #plt.show()
-    plt.hist(theta_data,bins=85)
+    #plt.hist(t_data,bins=85)
+    #
+    plt.show()
+    #plt.hist(theta_data,bins=85)
     #plt.show()
     Part2(t_data)
     Part3(data)
