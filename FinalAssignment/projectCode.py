@@ -33,10 +33,10 @@ def Part2(data):
 
     #minimise Nll for numdec decays
     F=0.5              #0.9
-    tau1=1.5              #1.9
+    tau1=1.0              #1.9
     tau2=2.0                   #0.5
     guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.01,9.99),(0.01,9.99))
+    bound=((0.0,1.0),(0.001,9.99),(0.001,9.99))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
     print't only'
     print results
