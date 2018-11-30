@@ -19,8 +19,6 @@ class Nll(object):
         nll=0.
         decay=self.decayform(params)
         decay.evalmethod=self.evalmethod
-        # for i in range(len(self.data)):
-        #     nll+=np.log(decay.evaluate(self.data[i]))
         nll = -np.sum(np.log(decay.evaluate(self.data)))
         #print nll
         #print params

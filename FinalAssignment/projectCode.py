@@ -225,7 +225,7 @@ def properrorfind(nll):
     return pos_error
 
 # part 4 calculates the proper errors for part 2 and 3
-def part4for3():
+def part4for3(data):
     nll=Nll(data,dualexpdec,'all')
     #minimise Nll for numdec decays
     F=0.5
@@ -257,12 +257,12 @@ def part4for3():
     print 'proper tau2 error',tau2_properr1
 
     print 'min F,proper error',minF,F_properr1
-    print 'min tau1,proper error',mintau1,tau1_properr1
+    print 'min tau1,proper error',mintau1,tau1_properr
     print 'min tau2,proper error',mintau2,tau2_properr
 
 
-def part4for2(f,tau1,tau2):
-    nll=Nll(data,dualexpdec,'t only')
+def part4for2(tdata,f,tau1,tau2):
+    nll=Nll(tdata,dualexpdec,'t only')
 
     #minimise Nll for numdec decays
     F=f
@@ -276,6 +276,7 @@ def part4for2(f,tau1,tau2):
     for i in range(len(results.x)):
         nll.parameters.append(results.x[i])
     nll.parameters=np.array(nll.parameters)
+    nll.nllmin=nll.NllEvalexp(nll.parameters)
     print nll.parameters
     minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
 
@@ -285,11 +286,11 @@ def part4for2(f,tau1,tau2):
 
 
     nll.error_calcindex=1
-    tau_properr1=properrfind(nll)
+    tau_properr1=properrorfind(nll)
     print 'proper tau1 error (t data only)',tau1_properr1
 
     nll.error_calcindex=2
-    tau2_properr1=properrfind(nll)
+    tau2_properr1=properrorfind(nll)
     print 'proper tau2 error ( t data only)',tau2_properr1
 
     print 'min F,simple errors',minF,F_properr1
@@ -312,8 +313,8 @@ def main():
     #plt.hist(theta_data,bins=85)
     #plt.show()
     #Part3(data)
-    Part2(t_data,0.5,1.0,2.0)
-    Part3(data)
+    part4for2(t_data,0.5,1.0,2.0)
+    part4for3(data)
     #Part2(t_data,0.5,2.0,1.0)
     #Part2(t_data,0.5,1.5,1.5)
     #part2(t_data,0.8,1.5,0.5)
