@@ -19,15 +19,15 @@ class Nll(object):
         nll=0.
         decay=self.decayform(params)
         decay.evalmethod=self.evalmethod
-        for i in range(len(self.data)):
-            nll+=np.log(decay.evaluate(self.data[i]))
+        # for i in range(len(self.data)):
+        #     nll+=np.log(decay.evaluate(self.data[i]))
+        nll = -np.sum(np.log(decay.evaluate(self.data)))
         #print nll
         #print params
-        return -nll
+        return nll
 
     #Method evaluates the nll with only one parameters being changed and the others set to the minimalising values. The method returns the difference between this nll and the minimal nll - 0.5.
     def NllErrexp(self,param):#finding roots for this function gives simple errors
-        self.nllmin=self.NllEvalexp(self.parameters)
         params=np.copy(self.parameters)
         params[self.error_calcindex]=param
         err=self.NllEvalexp(params)-self.nllmin-0.5
@@ -43,10 +43,9 @@ class Nll(object):
             params[i]=param[i-1]
 
         err=self.NllEvalexp(params)-self.nllmin
-        #print 'testing nll',self.NllEvalexp(params)
-        #print 'min nll',self.nllmin
-        #print 'testing',params
-        #print 'min params',self.parameters
-        #print 'nll dif',err
-        #print 'delta',self.delta
+        return err
+
+    def NllErrproper1(self,param):
+        err = self.NllEvalexp(param)-self.nllmin
+        #print err
         return err
