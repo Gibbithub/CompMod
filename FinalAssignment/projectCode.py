@@ -43,19 +43,20 @@ def Part2(data,f,tau1,tau2):
     for i in range(len(results.x)):
         nll.parameters.append(results.x[i])
     nll.parameters=np.array(nll.parameters)
+    nll.nllmin=nll.NllEvalexp(nll.parameters)
     print nll.parameters
     minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
 
     nll.error_calcindex=0
-    F_error1=optimize.root(nll.NllErrexp,minF-0.001).x-minF
-    F_error2=optimize.root(nll.NllErrexp,minF+0.001).x-minF
+    F_error1=optimize.root(nll.NllErrexp,minF-0.00001).x-minF
+    F_error2=optimize.root(nll.NllErrexp,minF+0.00001).x-minF
     print 'F',minF,F_error1,F_error2
     Fplot=np.linspace(minF+2*F_error1, minF+2*F_error2,300)
     Fnll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
 
     nll.error_calcindex=1
-    tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.001).x-mintau1
-    tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.001).x-mintau1
+    tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.01).x-mintau1
+    tau1_error2=optimize.root(nll.NllErrexp,mintau1+0.01).x-mintau1
     print 'tau1', mintau1,tau1_error1,tau1_error2
     tau1plot=np.linspace(mintau1+2*tau1_error1, mintau1+2*tau1_error2,300)
     tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in tau1plot])
@@ -153,9 +154,9 @@ def Part3(data):
     tau2plot=np.linspace(mintau2+2*tau2_error1, mintau2+2*tau2_error2,300)
     tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in tau2plot])
 
-    print 'min F,simple errors,proper error',minF,F_error1,F_error2,F_properr1#,F_properr2
-    print 'min tau1,simple errors,proper error',mintau1,tau1_error1,tau1_error2,tau1_properr1#,tau1_properr2
-    print 'min tau2,simple errors,proper error',mintau2,tau2_error1,tau2_error2,tau2_properr1#,tau2_properr2
+    print 'min F,simple errors,proper error',minF,F_error1,F_error2
+    print 'min tau1,simple errors,proper error',mintau1,tau1_error1,tau1_error2
+    print 'min tau2,simple errors,proper error',mintau2,tau2_error1,tau2_error2
 
     plt.plot(Fplot,Fnll)
     plt.title('Simple Errors on F (entire dataset)')
