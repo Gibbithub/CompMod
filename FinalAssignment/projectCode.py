@@ -31,10 +31,9 @@ def Part1(f, tau1,tau2):
 def Part2(data,f,tau1,tau2):
     nll=Nll(data,dualexpdec,'t only')
 
-    #minimise Nll for numdec decays
-    F=f              #0.9
-    tau1=tau1              #1.9
-    tau2=tau2                  #0.5
+    F=f
+    tau1=tau1
+    tau2=tau2
     guess_params=np.array([F,tau1,tau2])
     bound=((0.0,1.0),(0.001,9.99),(0.001,9.99))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
@@ -73,38 +72,8 @@ def Part2(data,f,tau1,tau2):
     tau2_properr=properrorfind(nll)
 
     print 'min F,simple errors,proper errors',minF,F_error1,F_error2,F_properr
-    print 'min tau1,simple errors,proper errors',mintau1,tau1_error1,tau1tau1_error1,tau1_properr
+    print 'min tau1,simple errors,proper errors',mintau1,tau1_error1,tau1_error1,tau1_properr
     print 'min tau2,simple errors,proper errors',mintau2,tau2_error1,tau2_error2,tau2_properr
-
-    plt.plot(Fplot,Fnll)
-    plt.title('Simple Errors on F ( t dataset only)')
-    plt.xlabel('Fraction of P1')
-    plt.ylabel('Change in Nll')
-    plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=minF+F_error1,color='k',linestyle='dashed',label= ('x=%.3f'%(minF+F_error1)))
-    plt.axvline(x=minF+F_error2,color='k',linestyle='dashed',label= ('x=%.3f'%(minF+F_error2)))
-    plt.legend()
-    plt.show()
-
-    plt.plot(tau1plot,tau1nll)
-    plt.title('Simple Errors on Tau1 (t dataset only)')
-    plt.xlabel('Tau1')
-    plt.ylabel('Change in Nll')
-    plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=mintau1+tau1_error1,color='k',linestyle='dashed',label= ('x=%.3f'%(mintau1+tau1_error1)))
-    plt.axvline(x=mintau1+tau1_error2,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau1_error2)))
-    plt.legend()
-    plt.show()
-
-    plt.plot(tau2plot,tau2nll)
-    plt.title('Simple Errors on Tau2 (t dataset only)')
-    plt.xlabel('Tau2')
-    plt.ylabel('Change in Nll')
-    plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=mintau2+tau2_error1,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau2_error1)))
-    plt.axvline(x=mintau2+tau2_error2,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau2_error2)))
-    plt.legend()
-    plt.show()
 
     return minF,mintau1,mintau2
 
@@ -115,15 +84,13 @@ def Part2(data,f,tau1,tau2):
 
 
 
+# Function to minise the NLL for part 3 and return the values at the minimum along with the simple errors and positive proper error
+def Part3(data,f,tau1,tau2):
 
-def Part3(data):
-
-    #print data
     nll=Nll(data,dualexpdec,'all')
-    #minimise Nll for numdec decays
-    F=0.5
-    tau1=1.0
-    tau2=2.0
+    F=f
+    tau1=tau1
+    tau2=tau2
     guess_params=np.array([F,tau1,tau2])
     bound=((0.0,1.0),(0.0,10.0),(0.0,10.0))
     results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
@@ -135,6 +102,7 @@ def Part3(data):
     nll.nllmin=nll.NllEvalexp(nll.parameters)
     print nll.parameters
     minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
+
 
     nll.error_calcindex=0
     F_error1=optimize.root(nll.NllErrexp,minF-0.01).x-minF
@@ -166,57 +134,28 @@ def Part3(data):
     print 'min tau1,simple errors,proper error',mintau1,tau1_error1,tau1_error2,tau1_properr
     print 'min tau2,simple errors,proper error',mintau2,tau2_error1,tau2_error2,tau2_properr
 
-    plt.plot(Fplot,Fnll)
-    plt.title('Simple Errors on F (entire dataset)')
-    plt.xlabel('Fraction of P1')
-    plt.ylabel('Change in Nll')
-    plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=minF+F_error1,color='k',linestyle='dashed',label= ('x=%.3f'%(minF+F_error1)))
-    plt.axvline(x=minF+F_error2,color='k',linestyle='dashed',label= ('x=%.3f'%(minF+F_error2)))
-    plt.legend()
-    plt.show()
-
-    plt.plot(tau1plot,tau1nll)
-    plt.title('Simple Errors on Tau1 (entire dataset)')
-    plt.xlabel('Tau1')
-    plt.ylabel('Change in Nll')
-    plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=mintau1+tau1_error1,color='k',linestyle='dashed',label= ('x=%.3f'%(mintau1+tau1_error1)))
-    plt.axvline(x=mintau1+tau1_error2,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau1_error2)))
-    plt.legend()
-    plt.show()
-
-    plt.plot(tau2plot,tau2nll)
-    plt.title('Simple Errors on Tau2 (entire dataset)')
-    plt.xlabel('Tau2')
-    plt.ylabel('Change in Nll')
-    plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=mintau2+tau2_error1,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau2_error1)))
-    plt.axvline(x=mintau2+tau2_error2,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau2_error2)))
-    plt.legend()
-    plt.show()
-
-    return minf,mintau1,mintau2
+    return minF,mintau1,mintau2
 
 
+#proper error finding function, takes in the nll initialised with nllmin and an error_calcindex which indicates for which parameter the error is to be found
 def properrorfind(nll):
     bound=(0.0,1.0),(0.01,9.99),(0.01,9.99)
     bounds=np.array(bound)
-    errorparamin=nll.parameters[nll.error_calcindex]
-    dnll=-1.0
+    errorparamin=nll.parameters[nll.error_calcindex] #minimum value of the error parameter
+    dnll=-1.0 # shift in nll
     pos_error=0
-    delta= nll.parameters[nll.error_calcindex]*0.05
-    nll.delta=delta
+    delta= nll.parameters[nll.error_calcindex]*0.05 # nudge to error parameter
+    nll.delta=delta # shift of error parameter from
     counter = 0
     while delta>=0.0001:
         while dnll<0.5:
             errorparam_fix=errorparamin+nll.delta
             bounds[nll.error_calcindex]=(errorparam_fix,errorparam_fix)
             counter +=1
-            print counter,'increasing'
+            #print counter,'increasing'
             params=np.copy(nll.parameters)
             params[nll.error_calcindex]=errorparam_fix
-            minimised=optimize.minimize(nll.NllErrproper1,params,bounds=bounds)
+            minimised=optimize.minimize(nll.NllErrproper1,params,bounds=bounds)# re- minimisation for bounds of error parameter set to a constant value
             dnll=minimised.fun
             nll.delta+=delta
         delta=delta/2.0
@@ -224,7 +163,7 @@ def properrorfind(nll):
             errorparam_fix=errorparamin+nll.delta
             bounds[nll.error_calcindex]=(errorparam_fix,errorparam_fix)
             counter +=1
-            print counter,'decreasing'
+            #print counter,'decreasing'
             params=np.copy(nll.parameters)
             params[nll.error_calcindex]=errorparam_fix
             minimised=optimize.minimize(nll.NllErrproper1,params,bounds=bounds)
@@ -234,9 +173,11 @@ def properrorfind(nll):
 
     return pos_error
 
-
+# runs part 1,2 and 3 and plots allows for plotting the distribution for the entire data set
 def main():
-    #Part1(0.5,1.0,2.0)
+    Part1(0.5,1.0,2.0)
+    Part1(1.0,1.0,2.0)
+    Part1(0.0,1.0,2.0)
     file=open('datafile-Xdecay.txt','r')
     stringdata=np.array([line.split() for line in file])
     data=np.asfarray(stringdata,float)
@@ -244,16 +185,20 @@ def main():
     #data=np.array([datafull[k] for k in n_randints])
     t_data=np.array([k[0] for k in data])
     theta_data=np.array([k[1] for k in data])
-    #plt.hist(t_data,bins=85)
-    #
-    #plt.show()
-    #plt.hist(theta_data,bins=85)
-    #plt.show()
+    '''plt.hist(t_data,bins=85)
+    plt.title('t distribution of data')
+    plt.xlabel('decay time')
+    plt.ylabel('occurence')
+    plt.show()
+    plt.hist(theta_data,bins=85)
+    plt.title('theta distribution of data')
+    plt.xlabel('theta')
+    plt.ylabel('occurence')
+    plt.show()'''
     ft,tau1t,tau2t=Part2(t_data,0.5,1.0,2.0)
-    f,tau1,tau2=Part3(data)
+    f,tau1,tau2=Part3(data,0.9,1.9,1.5)
     Part1(ft,tau1t,tau2t)
-    Part1(ft,tau1,tau2)
-
+    Part1(f,tau1,tau2)
 
 
 main()
