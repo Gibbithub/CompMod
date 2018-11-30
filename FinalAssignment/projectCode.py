@@ -17,12 +17,12 @@ def Part1(f, tau1,tau2):
 
     # plot the time distribution followed by the theta distribution for F=0.5
     plt.hist(tdist, bins=85)
-    plt.title("Time distribution for F=%.2f" %(f))
+    plt.title("Time distribution for F=%.2f,Tau1=%.2f,Tau2=%.2f" %(f,tau1,tau2))
     plt.xlabel("decay time(s)")
     plt.ylabel("occurence")
     plt.show()
     plt.hist(thetadist,bins=85)
-    plt.title("Theta distribution for F=%.2f" %(f))
+    plt.title("Theta distribution for F=%.2f,Tau1=%.2f,Tau2=%.2f" %(f,tau1,tau2))
     plt.xlabel("decay angle(radians)")
     plt.ylabel("occurence")
     plt.show()
@@ -48,11 +48,13 @@ def Part2(data,f,tau1,tau2):
     minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
 
     nll.error_calcindex=0
-    F_error1=optimize.root(nll.NllErrexp,minF-0.00001).x-minF
-    F_error2=optimize.root(nll.NllErrexp,minF+0.00001).x-minF
+    F_error1=optimize.root(nll.NllErrexp,minF-0.001).x-minF
+    F_error2=optimize.root(nll.NllErrexp,minF+0.001).x-minF
     print 'F',minF,F_error1,F_error2
     Fplot=np.linspace(minF+2*F_error1, minF+2*F_error2,300)
     Fnll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    F_properr=properrorfind(nll)
+
 
     nll.error_calcindex=1
     tau1_error1=optimize.root(nll.NllErrexp,mintau1-0.01).x-mintau1
@@ -60,6 +62,7 @@ def Part2(data,f,tau1,tau2):
     print 'tau1', mintau1,tau1_error1,tau1_error2
     tau1plot=np.linspace(mintau1+2*tau1_error1, mintau1+2*tau1_error2,300)
     tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in tau1plot])
+    tau1_properr=properrorfind(nll)
 
     nll.error_calcindex=2
     tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.001).x-mintau2
@@ -67,18 +70,19 @@ def Part2(data,f,tau1,tau2):
     print 'tau2',mintau2,tau2_error1,tau2_error2
     tau2plot=np.linspace(mintau2+2*tau2_error1, mintau2+2*tau2_error2,300)
     tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in tau2plot])
+    tau2_properr=properrorfind(nll)
 
-    print 'min F,simple errors',minF,F_error1,F_error2
-    print 'min tau1,simple errors',mintau1,tau1_error1,tau1_error2
-    print 'min tau2,simple errors',mintau2,tau2_error1,tau2_error2
+    print 'min F,simple errors,proper errors',minF,F_error1,F_error2,F_properr
+    print 'min tau1,simple errors,proper errors',mintau1,tau1_error1,tau1tau1_error1,tau1_properr
+    print 'min tau2,simple errors,proper errors',mintau2,tau2_error1,tau2_error2,tau2_properr
 
     plt.plot(Fplot,Fnll)
     plt.title('Simple Errors on F ( t dataset only)')
     plt.xlabel('Fraction of P1')
     plt.ylabel('Change in Nll')
     plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=minF+F_error1,color='k',linestyle='dashed',label= ('x=%.2f'%(minF+F_error1)))
-    plt.axvline(x=minF+F_error2,color='k',linestyle='dashed',label= ('x=%.2f'%(minF+F_error2)))
+    plt.axvline(x=minF+F_error1,color='k',linestyle='dashed',label= ('x=%.3f'%(minF+F_error1)))
+    plt.axvline(x=minF+F_error2,color='k',linestyle='dashed',label= ('x=%.3f'%(minF+F_error2)))
     plt.legend()
     plt.show()
 
@@ -87,8 +91,8 @@ def Part2(data,f,tau1,tau2):
     plt.xlabel('Tau1')
     plt.ylabel('Change in Nll')
     plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=mintau1+tau1_error1,color='k',linestyle='dashed',label= ('x=%.2f'%(mintau1+tau1_error1)))
-    plt.axvline(x=mintau1+tau1_error2,color='k',linestyle='dashed',label=('x=%.2f'%(mintau1+tau1_error2)))
+    plt.axvline(x=mintau1+tau1_error1,color='k',linestyle='dashed',label= ('x=%.3f'%(mintau1+tau1_error1)))
+    plt.axvline(x=mintau1+tau1_error2,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau1_error2)))
     plt.legend()
     plt.show()
 
@@ -97,8 +101,8 @@ def Part2(data,f,tau1,tau2):
     plt.xlabel('Tau2')
     plt.ylabel('Change in Nll')
     plt.axhline(y=0.5, linestyle='dashed')
-    plt.axvline(x=mintau2+tau2_error1,color='k',linestyle='dashed',label=('x=%.2f'%(mintau1+tau2_error1)))
-    plt.axvline(x=mintau2+tau2_error2,color='k',linestyle='dashed',label=('x=%.2f'%(mintau1+tau2_error2)))
+    plt.axvline(x=mintau2+tau2_error1,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau2_error1)))
+    plt.axvline(x=mintau2+tau2_error2,color='k',linestyle='dashed',label=('x=%.3f'%(mintau1+tau2_error2)))
     plt.legend()
     plt.show()
 
@@ -138,6 +142,8 @@ def Part3(data):
     print 'F',minF,F_error1,F_error2,
     Fplot=np.linspace(minF+2*F_error1, minF+2*F_error2,300)
     Fnll=np.array([(nll.NllErrexp(k)+0.5) for k in Fplot])
+    F_properr=properrorfind(nll)
+
 
 
     nll.error_calcindex=1
@@ -146,6 +152,7 @@ def Part3(data):
     print 'tau1', mintau1,tau1_error1,tau1_error2
     tau1plot=np.linspace(mintau1+2*tau1_error1, mintau1+2*tau1_error2,300)
     tau1nll=np.array([(nll.NllErrexp(k)+0.5) for k in tau1plot])
+    tau1_properr=properrorfind(nll)
 
     nll.error_calcindex=2
     tau2_error1=optimize.root(nll.NllErrexp,mintau2-0.1).x-mintau2
@@ -153,10 +160,11 @@ def Part3(data):
     print 'tau2',mintau2,tau2_error1,tau2_error2
     tau2plot=np.linspace(mintau2+2*tau2_error1, mintau2+2*tau2_error2,300)
     tau2nll=np.array([(nll.NllErrexp(k)+0.5) for k in tau2plot])
+    tau2_properr=properrorfind(nll)
 
-    print 'min F,simple errors,proper error',minF,F_error1,F_error2
-    print 'min tau1,simple errors,proper error',mintau1,tau1_error1,tau1_error2
-    print 'min tau2,simple errors,proper error',mintau2,tau2_error1,tau2_error2
+    print 'min F,simple errors,proper error',minF,F_error1,F_error2,F_properr
+    print 'min tau1,simple errors,proper error',mintau1,tau1_error1,tau1_error2,tau1_properr
+    print 'min tau2,simple errors,proper error',mintau2,tau2_error1,tau2_error2,tau2_properr
 
     plt.plot(Fplot,Fnll)
     plt.title('Simple Errors on F (entire dataset)')
@@ -188,18 +196,19 @@ def Part3(data):
     plt.legend()
     plt.show()
 
+    return minf,mintau1,mintau2
+
+
 def properrorfind(nll):
     bound=(0.0,1.0),(0.01,9.99),(0.01,9.99)
     bounds=np.array(bound)
     errorparamin=nll.parameters[nll.error_calcindex]
     dnll=-1.0
     pos_error=0
-    neg_error=0
     delta= nll.parameters[nll.error_calcindex]*0.05
-    print 'delta start',delta
     nll.delta=delta
     counter = 0
-    while delta>=0.001:
+    while delta>=0.0001:
         while dnll<0.5:
             errorparam_fix=errorparamin+nll.delta
             bounds[nll.error_calcindex]=(errorparam_fix,errorparam_fix)
@@ -221,84 +230,9 @@ def properrorfind(nll):
             minimised=optimize.minimize(nll.NllErrproper1,params,bounds=bounds)
             dnll=minimised.fun
             nll.delta-=delta
-
     pos_error=nll.delta
-    print 'pos_error',pos_error
 
     return pos_error
-
-# part 4 calculates the proper errors for part 2 and 3
-def part4for3(data):
-    nll=Nll(data,dualexpdec,'all')
-    #minimise Nll for numdec decays
-    F=0.5
-    tau1=1.0
-    tau2=2.0
-    guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.001,9.99),(0.001,9.99))
-    results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
-    print 'all'
-    print results
-    for i in range(len(results.x)):
-        nll.parameters.append(results.x[i])
-    nll.parameters=np.array(nll.parameters)
-    nll.nllmin=nll.NllEvalexp(nll.parameters)
-    print nll.parameters
-    minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
-
-    nll.error_calcindex=0
-    F_properr1=properrorfind(nll)
-    print 'proper F error',F_properr1
-
-
-    nll.error_calcindex=1
-    tau1_properr1=properrorfind(nll)
-    print 'proper tau1 error',tau1_properr1
-
-    nll.error_calcindex=2
-    tau2_properr1=properrorfind(nll)
-    print 'proper tau2 error',tau2_properr1
-
-    print 'min F,proper error',minF,F_properr1
-    print 'min tau1,proper error',mintau1,tau1_properr
-    print 'min tau2,proper error',mintau2,tau2_properr
-
-
-def part4for2(tdata,f,tau1,tau2):
-    nll=Nll(tdata,dualexpdec,'t only')
-
-    #minimise Nll for numdec decays
-    F=f
-    tau1=tau1
-    tau2=tau2
-    guess_params=np.array([F,tau1,tau2])
-    bound=((0.0,1.0),(0.001,9.99),(0.001,9.99))
-    results=optimize.minimize(nll.NllEvalexp,guess_params,bounds=bound)
-    print't only'
-    print results
-    for i in range(len(results.x)):
-        nll.parameters.append(results.x[i])
-    nll.parameters=np.array(nll.parameters)
-    nll.nllmin=nll.NllEvalexp(nll.parameters)
-    print nll.parameters
-    minF,mintau1,mintau2=nll.parameters[0],nll.parameters[1],nll.parameters[2]
-
-    nll.error_calcindex=0
-    F_properr1=properrorfind(nll)
-    print 'proper F error (t data only)',F_properr1
-
-
-    nll.error_calcindex=1
-    tau_properr1=properrorfind(nll)
-    print 'proper tau1 error (t data only)',tau1_properr1
-
-    nll.error_calcindex=2
-    tau2_properr1=properrorfind(nll)
-    print 'proper tau2 error ( t data only)',tau2_properr1
-
-    print 'min F,simple errors',minF,F_properr1
-    print 'min tau1,simple errors',mintau1,tau1_properr1
-    print 'min tau2,simple errors',mintau2,tau2_properr1
 
 
 def main():
@@ -315,12 +249,11 @@ def main():
     #plt.show()
     #plt.hist(theta_data,bins=85)
     #plt.show()
-    #Part3(data)
-    part4for2(t_data,0.5,1.0,2.0)
-    part4for3(data)
-    #Part2(t_data,0.5,2.0,1.0)
-    #Part2(t_data,0.5,1.5,1.5)
-    #part2(t_data,0.8,1.5,0.5)
+    ft,tau1t,tau2t=Part2(t_data,0.5,1.0,2.0)
+    f,tau1,tau2=Part3(data)
+    Part1(ft,tau1t,tau2t)
+    Part1(ft,tau1,tau2)
+
 
 
 main()

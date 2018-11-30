@@ -15,7 +15,8 @@ class dualexpdec(object):
             t=np.random.uniform(0.0, 10.0)
             theta=np.random.uniform(0.0,2.0*np.pi)
             y=np.random.uniform(0.0,1.0)
-            if y < self.evaluate(np.array([t,theta])):
+            #print(np.asarray([[t,theta]]).shape)
+            if y < self.evaluate(np.asarray([[t,theta]])):
                 logic = False
         return t,theta
 
