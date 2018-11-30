@@ -101,8 +101,6 @@ def Part2(data,f,tau1,tau2):
     plt.legend()
     plt.show()
 
-<<<<<<< HEAD
-=======
     return minF,mintau1,mintau2
 
 
@@ -113,7 +111,6 @@ def Part2(data,f,tau1,tau2):
 
 
 
->>>>>>> c584149c64646993cfcb114140acf23977c24b29
 def Part3(data):
 
     #print data
@@ -196,13 +193,9 @@ def properrorfind(nll):
     errorparamin=nll.parameters[nll.error_calcindex]
     dnll=-1.0
     pos_error=0
-<<<<<<< HEAD
     neg_error=0
     delta= nll.parameters[nll.error_calcindex]*0.05
     print 'delta start',delta
-=======
-    delta= nll.parameters[nll.error_calcindex]*0.1
->>>>>>> c584149c64646993cfcb114140acf23977c24b29
     nll.delta=delta
     counter = 0
     while delta>=0.001:
@@ -311,11 +304,7 @@ def main():
     file=open('datafile-Xdecay.txt','r')
     stringdata=np.array([line.split() for line in file])
     data=np.asfarray(stringdata,float)
-<<<<<<< HEAD
-    #n_randints=np.random.randint(len(datafull),size=1000)
-=======
     #n_randints=np.random.randint(len(datafull),size=5000)
->>>>>>> c584149c64646993cfcb114140acf23977c24b29
     #data=np.array([datafull[k] for k in n_randints])
     t_data=np.array([k[0] for k in data])
     theta_data=np.array([k[1] for k in data])
